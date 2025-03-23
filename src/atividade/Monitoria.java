@@ -2,6 +2,9 @@ package atividade;
 	
 import middleware.Validator;
 
+/**
+ * A classe {@code Monitoria} representa uma atividade do tipo monitoria, que é uma especialização da classe {@code Atividade}.
+ */
 public class Monitoria extends Atividade{
 	private String disciplina;
 
