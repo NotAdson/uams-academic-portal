@@ -2,6 +2,9 @@ package atividade;
 
 import middleware.Validator;
 
+/**
+ * A classe {@code Extensao} representa uma atividade do tipo pesquisa e extensão, que é uma especialização da classe {@code Atividade}.
+ */
 public class Extensao extends Atividade{
 	private String subtipo;
 
