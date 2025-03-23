@@ -2,6 +2,9 @@ package atividade;
 
 import middleware.Validator;
 
+/**
+ * A classe {@code RepresentacaoEstudantil} representa uma atividade do tipo representação estudantil, que é uma especialização da classe {@code Atividade}.
+ */
 public class RepresentacaoEstudantil extends Atividade{
 	private String subTipo;
 
