@@ -2,6 +2,9 @@ package atividade;
 
 import middleware.Validator;
 
+/**
+ * A classe {@code Estagio} representa uma atividade do tipo estágio, que é uma especialização da classe {@code Atividade}.
+ */
 public class Estagio extends Atividade{
 	private String empresa;
 
