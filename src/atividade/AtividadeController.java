@@ -85,6 +85,7 @@ public class AtividadeController {
 		this.atividades.get(cpf).add(extensao);
 		return codigo;
 	}
+
 	public String criarAtividadeEstagio(String cpf, int unidadeAcumulado, String empresa, int usuarioCredito){
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
 		Atividade estagio = new Estagio(codigo, unidadeAcumulado, empresa);
@@ -98,6 +99,7 @@ public class AtividadeController {
 		this.atividades.get(cpf).add(estagio);
 		return codigo;
 	}
+
 	public String criarAtividadeRepresentacao(String cpf, int unidadeAcumulado, String subtipo, int usuarioCredito){
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
 		Atividade representacao = new Monitoria(codigo, unidadeAcumulado, subtipo);
@@ -111,6 +113,7 @@ public class AtividadeController {
 		this.atividades.get(cpf).add(representacao);
 		return codigo;
 	}
+
 	public String criarAtividadeMonitoria(String cpf, int unidadeAcumulado, String disciplina, int usuarioCredito){
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
 		Atividade monitoria = new Monitoria(codigo, unidadeAcumulado, disciplina);
