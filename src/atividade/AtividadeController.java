@@ -124,4 +124,16 @@ public class AtividadeController {
 		this.atividades.get(cpf).add(monitoria);
 		return codigo;
 	}
+
+	public int getCreditoAtividades(String cpf, String tipo){
+		int totalCreditos = 0;
+
+		for(Atividade atividade: this.atividades.get(cpf)){
+			if(atividade.getTipo().equals(tipo)){
+				totalCreditos += atividade.getCreditos();
+			}
+		}
+
+		return totalCreditos;
+	}
 }
