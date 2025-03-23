@@ -2,11 +2,15 @@ package dica;
 
 import middleware.Validator;
 
-public class Multimidia implements IAnexo{
+/**
+ * A classe {@code Multimidia} representa um anexo do tipo multimídia (áudio ou vídeo) que pode ser adicionado a uma dica.
+ * Ela implementa a interface {@code IAnexo} e fornece métodos para gerar resumos, detalhes e calcular o bônus associado ao anexo.
+ */
+public class Multimidia implements IAnexo {
 	private String link, cabecalho;
 	private int duracao;
 
-	public Multimidia(String link, String cabecalho, int duracao){
+	public Multimidia(String link, String cabecalho, int duracao) {
 		Validator.verifyStringBlank(link, "LINK");
 		Validator.verifyStringBlank(cabecalho, "CABECALHO");
 
@@ -15,15 +19,18 @@ public class Multimidia implements IAnexo{
 		this.duracao = duracao;
 	}
 
-	public String getResumo(){
+	@Override
+	public String getResumo() {
 		return this.link + "\n" + this.cabecalho;
 	}
 
-	public String getDetalhado(){
+	@Override
+	public String getDetalhado() {
 		return this.link + "\n" + this.duracao + "s\n" + this.cabecalho;
 	}
 
-	public double calcularBonus(){
+	@Override
+	public double calcularBonus() {
 		return (this.duracao / 60) * 5;
 	}
 }
