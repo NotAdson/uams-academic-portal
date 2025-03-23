@@ -139,4 +139,23 @@ public class AtividadeController {
 
 		return totalCreditos;
 	}
+
+	public String gerarMapaCreditos(String cpf){
+		HashMap<String, Integer> mapa = new HashMap<>();
+
+		for(Atividade atual: this.atividades.get(cpf)){
+			String tipo = atual.getTipo();
+			int creditos = atual.getCreditos();
+
+			mapa.put(tipo, (mapa.containsKey(tipo)? creditos + mapa.get(tipo) : 0));
+		}
+
+		StringBuilder result = new StringBuilder();
+
+		for(String key: mapa.keySet()){
+			result.append(key).append(": ").append(mapa.get(key)).append("\n");
+		}
+
+		return result.toString();
+	}
 }
