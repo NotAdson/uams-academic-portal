@@ -8,17 +8,16 @@ import java.util.AbstractMap;
 import middleware.Validator;
 
 public class AtividadeController {
-	private static int maxCreditosMonitoria = 16, minSemestreMonitoria = 1;
-	private static int maxCreditosEstagio = 18, minHorasEstagio = 300;
-	private static int maxCreditosRepresentacaoEstudantil = 2, minAnosRepresentacaoEstudantil = 1;
-	private static int maxCreditosExtensao = 18;
+	private final static int MAX_CREDITOS_MONITORIA = 16, MIN_SEMESTRE_MONITORIA = 1;
+	private final static int MAX_CREDITOS_ESTAGIO = 18, MIN_HORAS_ESTAGIO = 300;
+	private final static int MAX_CREDITOS_REPRESENTACAO_ESTUDANTIL = 2, MIN_ANOS_REPRESENTACAO_ESTUDANTIL = 1;
+	private final static int MAX_CREDITOS_EXTENSAO = 18;
 
 	private HashMap<String, ArrayList<Atividade>> atividades;
 	
 	public AtividadeController(){
 		this.atividades = new HashMap<String, ArrayList<Atividade>>();
 	}
-
 
 	private static Map.Entry<String, Integer> tratarCodigo(String codigo){
 		String[] splited = codigo.split("_");
@@ -74,11 +73,11 @@ public class AtividadeController {
 		return true;
 	}
 
-	public String criarAtividadePesquisaExtensao(String cpf, int unidadeAcumulado, String subtipo, int usuarioCredito){
+	public String criarAtividadePesquisaExtensao(String cpf, int unidadeAcumulado, String subtipo){
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
 		Atividade extensao = new Extensao(codigo, unidadeAcumulado, subtipo);
 		
-		if(extensao.getCreditos() + usuarioCredito > maxCreditosExtensao){
+		if(extensao.getCreditos() + this.getCreditoAtividades(cpf, "PESQUISA_EXTENSAO") > MAX_CREDITOS_EXTENSAO){
 			return "LIMITE DE CREDITOS ULTRAPASSADO";
 		}
 		
@@ -86,13 +85,13 @@ public class AtividadeController {
 		return codigo;
 	}
 
-	public String criarAtividadeEstagio(String cpf, int unidadeAcumulado, String empresa, int usuarioCredito){
+	public String criarAtividadeEstagio(String cpf, int unidadeAcumulado, String empresa){
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
 		Atividade estagio = new Estagio(codigo, unidadeAcumulado, empresa);
 		
-		if(unidadeAcumulado < minHorasEstagio){
+		if(unidadeAcumulado < MIN_HORAS_ESTAGIO){
 			return "ABAIXO DO MINIMO DE HORAS";
-		}else if(estagio.getCreditos() + usuarioCredito > maxCreditosEstagio){
+		}else if(estagio.getCreditos() + this.getCreditoAtividades(cpf, "ESTAGIO") > MAX_CREDITOS_ESTAGIO){
 			return "LIMITE DE CREDITOS ULTRAPASSADO";
 		}
 		
@@ -100,13 +99,13 @@ public class AtividadeController {
 		return codigo;
 	}
 
-	public String criarAtividadeRepresentacao(String cpf, int unidadeAcumulado, String subtipo, int usuarioCredito){
+	public String criarAtividadeRepresentacao(String cpf, int unidadeAcumulado, String subtipo){
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
 		Atividade representacao = new Monitoria(codigo, unidadeAcumulado, subtipo);
 		
-		if(unidadeAcumulado < minAnosRepresentacaoEstudantil){
+		if(unidadeAcumulado < MIN_ANOS_REPRESENTACAO_ESTUDANTIL){
 			return "ABAIXO DO MINIMO DE ANOS";
-		}else if(representacao.getCreditos() + usuarioCredito > maxCreditosRepresentacaoEstudantil){
+		}else if(representacao.getCreditos() + this.getCreditoAtividades(cpf, "REPRESENTACAO_ESTUDANTIL") > MAX_CREDITOS_REPRESENTACAO_ESTUDANTIL){
 			return "LIMITE DE CREDITOS ULTRAPASSADO";
 		}
 		
@@ -114,13 +113,13 @@ public class AtividadeController {
 		return codigo;
 	}
 
-	public String criarAtividadeMonitoria(String cpf, int unidadeAcumulado, String disciplina, int usuarioCredito){
+	public String criarAtividadeMonitoria(String cpf, int unidadeAcumulado, String disciplina){
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
 		Atividade monitoria = new Monitoria(codigo, unidadeAcumulado, disciplina);
 		
-		if(unidadeAcumulado < minSemestreMonitoria){
+		if(unidadeAcumulado < MIN_SEMESTRE_MONITORIA){
 			return "ABAIXO DO MINIMO DE SEMESTRES";
-		}else if(monitoria.getCreditos() + usuarioCredito > maxCreditosMonitoria){
+		}else if(monitoria.getCreditos() + this.getCreditoAtividades(cpf, "MONITORIA") > MAX_CREDITOS_MONITORIA){
 			return "LIMITE DE CREDITOS ULTRAPASSADO";
 		}
 		
@@ -157,5 +156,15 @@ public class AtividadeController {
 		}
 
 		return result.toString();
+	}
+
+	public boolean isMetaAlcancada(String cpf){
+		int totalCreditos = 0;
+
+		for(Atividade atual: this.atividades.get(cpf)){
+			totalCreditos += atual.getCreditos();
+		}
+
+		return totalCreditos >= 22;
 	}
 }
