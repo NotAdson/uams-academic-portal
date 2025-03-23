@@ -1,5 +1,8 @@
 package atividade;
 
+/**
+ * A classe {@code Atividade} representa uma atividade que pode ser realizada por um estudante.
+ */
 public class Atividade {
 	private int tempo;
 	private double creditos;
