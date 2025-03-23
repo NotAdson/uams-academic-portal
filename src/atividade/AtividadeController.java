@@ -13,6 +13,8 @@ public class AtividadeController {
 	private final static int MAX_CREDITOS_REPRESENTACAO_ESTUDANTIL = 2, MIN_ANOS_REPRESENTACAO_ESTUDANTIL = 1;
 	private final static int MAX_CREDITOS_EXTENSAO = 18;
 
+	private final static int META_CREDITOS = 22;
+
 	private HashMap<String, ArrayList<Atividade>> atividades;
 	
 	public AtividadeController(){
@@ -165,6 +167,6 @@ public class AtividadeController {
 			totalCreditos += atual.getCreditos();
 		}
 
-		return totalCreditos >= 22;
+		return totalCreditos >= META_CREDITOS;
 	}
 }
