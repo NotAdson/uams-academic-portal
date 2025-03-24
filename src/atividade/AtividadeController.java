@@ -15,10 +15,20 @@ public class AtividadeController {
 
 	private final static int META_CREDITOS = 22;
 
+	private HashMap<String, Integer> maximos;
+
 	private HashMap<String, ArrayList<Atividade>> atividades;
 	
 	public AtividadeController(){
 		this.atividades = new HashMap<String, ArrayList<Atividade>>();
+
+		HashMap<String, Integer> maximos = new HashMap<>();
+		
+		maximos.put("PESQUISA_EXTENSAO", MAX_CREDITOS_EXTENSAO);
+		maximos.put("MONITORIA", MAX_CREDITOS_MONITORIA);
+		maximos.put("ESTAGIO", MAX_CREDITOS_ESTAGIO);
+		maximos.put("REPRESENTACAO_ESTUDANTIL", MAX_CREDITOS_REPRESENTACAO_ESTUDANTIL);
+
 	}
 
 	private static Map.Entry<String, Integer> tratarCodigo(String codigo){
@@ -141,9 +151,21 @@ public class AtividadeController {
 		return totalCreditos;
 	}
 
+	public String gerarMapaAtividade(String cpf, String tipo){
+		StringBuilder result = new StringBuilder();
+
+		result.append(this.getCreditoAtividades(cpf, tipo));
+
+		if(this.maximos.containsKey(tipo)){
+			result.append("/").append(this.maximos.get(tipo));
+		}
+
+		return result.toString();
+	}
+
 	public String gerarMapaCreditos(String cpf){
 		HashMap<String, Integer> mapa = new HashMap<>();
-
+		
 		for(Atividade atual: this.atividades.get(cpf)){
 			String tipo = atual.getTipo();
 			int creditos = atual.getCreditos();
@@ -154,7 +176,13 @@ public class AtividadeController {
 		StringBuilder result = new StringBuilder();
 
 		for(String key: mapa.keySet()){
-			result.append(key).append(": ").append(mapa.get(key)).append("\n");
+			result.append(key).append(": ").append(mapa.get(key));
+
+			if(maximos.containsKey(key)){
+				result.append("/").append(maximos.get(key));
+			}
+
+			result.append("\n");
 		}
 
 		return result.toString();
