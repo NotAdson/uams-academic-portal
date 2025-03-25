@@ -67,4 +67,54 @@ public class DicaController {
 	public double adicionarElementoReferenciaDica(int posicao, String titulo, String fonte, int ano, boolean conferida, int importancia) {
 		return this.dicas.get(posicao).adicionarElementoReferencia(titulo, fonte, conferida, ano, importancia);
 	}
+
+	/**
+	 * Lista as dicas(versão resumida)
+	 *
+	 * @return A representação da dica em formato resumido.
+	 */
+	public String[] listarDicas(){
+		String[] result = new String[this.dicas.size()];
+		
+		for(int i = 0; i < this.dicas.size(); i++){
+			result[i] = this.dicas.get(i).getResumo();
+		}
+
+		return result;
+	}
+
+	/**
+	 * Lista as dicas(versão detalhada)
+	 *
+	 * @return Um array com a representação das dicas em formato detalhado.
+	 */
+	public String[] listarDicasDetalhes(){
+		String[] result = new String[this.dicas.size()];
+		
+		for(int i = 0; i < this.dicas.size(); i++){
+			result[i] = this.dicas.get(i).getDetalhado();
+		}
+
+		return result;
+	}
+	
+	/**
+	 * Pega o resumo de uma dica pela posição
+	 *
+	 * @param posicao posição da dica
+	 * @return resumo da dica
+	 * */
+	public String listarDica(int posicao){
+		return this.dicas.get(posicao).getResumo();
+	}
+
+	/**
+	 * Pega os detalhes de uma dica pela posição
+	 *
+	 * @param posicao posição da dica
+	 * @return detalhes da dica
+	 * */
+	public String listarDicaDetalhes(int posicao){
+		return this.dicas.get(posicao).getDetalhado();
+	}
 }
