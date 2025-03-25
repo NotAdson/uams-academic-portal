@@ -56,7 +56,7 @@ public class AtividadeController {
 
 		cpf = elemento.getKey(); position = elemento.getValue();
 		
-		if(this.atividades.containsKey(cpf) && (0 < position || position > this.atividades.get(cpf).size())){
+		if(!this.atividades.containsKey(cpf) || (0 < position || position > this.atividades.get(cpf).size())){
 			return false;
 		}
 
@@ -92,6 +92,10 @@ public class AtividadeController {
 		if(extensao.getCreditos() + this.getCreditoAtividades(cpf, "PESQUISA_EXTENSAO") > MAX_CREDITOS_EXTENSAO){
 			return "LIMITE DE CREDITOS ULTRAPASSADO";
 		}
+
+		if(!this.atividades.containsKey(cpf)){
+			this.atividades.put(cpf, new ArrayList<>());
+		}
 		
 		this.atividades.get(cpf).add(extensao);
 		return codigo;
@@ -106,7 +110,11 @@ public class AtividadeController {
 		}else if(estagio.getCreditos() + this.getCreditoAtividades(cpf, "ESTAGIO") > MAX_CREDITOS_ESTAGIO){
 			return "LIMITE DE CREDITOS ULTRAPASSADO";
 		}
-		
+	
+		if(!this.atividades.containsKey(cpf)){
+			this.atividades.put(cpf, new ArrayList<>());
+		}
+
 		this.atividades.get(cpf).add(estagio);
 		return codigo;
 	}
@@ -121,6 +129,10 @@ public class AtividadeController {
 			return "LIMITE DE CREDITOS ULTRAPASSADO";
 		}
 		
+		if(!this.atividades.containsKey(cpf)){
+			this.atividades.put(cpf, new ArrayList<>());
+		}
+
 		this.atividades.get(cpf).add(representacao);
 		return codigo;
 	}
@@ -135,6 +147,10 @@ public class AtividadeController {
 			return "LIMITE DE CREDITOS ULTRAPASSADO";
 		}
 		
+		if(!this.atividades.containsKey(cpf)){
+			this.atividades.put(cpf, new ArrayList<>());
+		}
+
 		this.atividades.get(cpf).add(monitoria);
 		return codigo;
 	}
@@ -187,14 +203,16 @@ public class AtividadeController {
 
 		return result.toString();
 	}
-
-	public boolean isMetaAlcancada(String cpf){
+	public int getTotalCreditos(String cpf){
 		int totalCreditos = 0;
 
 		for(Atividade atual: this.atividades.get(cpf)){
 			totalCreditos += atual.getCreditos();
 		}
 
-		return totalCreditos >= META_CREDITOS;
+		return totalCreditos;
+	}
+	public boolean isMetaAlcancada(String cpf){
+		return this.getTotalCreditos(cpf) >= META_CREDITOS;
 	}
 }
