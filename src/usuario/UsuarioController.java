@@ -19,7 +19,7 @@ public class UsuarioController {
 	}
 
 	public boolean criarUsuario(String nome, String cpf, String senha, String matricula){
-		if(usuarios.containsKey(cpf)){
+		if(usuarios.containsKey(cpf) || senha.length() != 8 || cpf.length() != 11){
 			return false;
 		}
 
