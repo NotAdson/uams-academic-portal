@@ -70,7 +70,7 @@ public class Dica {
 	 * @param duracao    A duração do conteúdo multimídia em segundos.
 	 * @return O valor do bônus calculado para o anexo multimídia adicionado.
 	 */
-	public double adicionarElementoMultimidia(String link, String cabecalho, int duracao) {
+	public int adicionarElementoMultimidia(String link, String cabecalho, int duracao) {
 		IAnexo anexo = new Multimidia(link, cabecalho, duracao);
 		this.anexos.add(anexo);
 		return anexo.calcularBonus();
@@ -82,7 +82,7 @@ public class Dica {
 	 * @param texto  O conteúdo textual do anexo.
 	 * @return O valor do bônus calculado para o anexo de texto adicionado.
 	 */
-	public double adicionarElementoTexto(String texto) {
+	public int adicionarElementoTexto(String texto) {
 		IAnexo anexo = new Texto(texto);
 		this.anexos.add(anexo);
 		return anexo.calcularBonus();
@@ -98,7 +98,7 @@ public class Dica {
 	 * @param relevancia  A relevância da referência (1 a 5).
 	 * @return O valor do bônus calculado para o anexo de referência adicionado.
 	 */
-	public double adicionarElementoReferencia(String titulo, String fonte, boolean verificado, int ano, int relevancia) {
+	public int adicionarElementoReferencia(String titulo, String fonte, boolean verificado, int ano, int relevancia) {
 		IAnexo anexo = new Referencia(titulo, fonte, verificado, ano, relevancia);
 		this.anexos.add(anexo);
 		return anexo.calcularBonus();

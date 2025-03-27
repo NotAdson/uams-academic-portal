@@ -12,5 +12,5 @@ public interface IAnexo {
      *
      * @return O valor do bônus calculado para o anexo.
      */
-    public double calcularBonus();
+    public int calcularBonus();
 }

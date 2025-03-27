@@ -33,7 +33,7 @@ public class Referencia implements IAnexo {
 	}
 
 	@Override
-	public double calcularBonus() {
-		return (this.verificado ? 15 : 0);
+	public int calcularBonus() {
+		return Math.min(50, (this.verificado ? 15 : 0));
 	}
 }

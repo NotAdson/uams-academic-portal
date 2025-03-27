@@ -30,7 +30,7 @@ public class Multimidia implements IAnexo {
 	}
 
 	@Override
-	public double calcularBonus() {
-		return (this.duracao / 60) * 5;
+	public int calcularBonus() {
+		return (int)Math.min(50, (this.duracao / 60) * 5);
 	}
 }

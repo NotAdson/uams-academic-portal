@@ -25,10 +25,10 @@ public class Texto implements IAnexo {
 	}
 
 	@Override
-	public double calcularBonus() {
+	public int calcularBonus() {
 		if (this.texto.length() < 100) {
 			return 0;
 		}
-		return this.texto.length() / 10;
+		return (int)Math.min(50, this.texto.length() / 10);
 	}
 }

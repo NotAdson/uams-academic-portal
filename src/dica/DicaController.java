@@ -31,10 +31,14 @@ public class DicaController {
 	 *
 	 * @param posicao A posição da dica na lista.
 	 * @param texto   O conteúdo textual a ser adicionado.
-	 * @return O valor do bônus calculado para o elemento de texto adicionado.
+	 * @return O valor do bônus calculado para o elemento de texto adicionado ou -1 caso não seja possível adicionar o texto.
 	 * @throws IndexOutOfBoundsException Se a posição for fora dos limites da lista.
 	 */
-	public double adicionarElemetoTextoDica(int posicao, String texto) {
+	public int adicionarElemetoTextoDica(int posicao, String texto) {
+		if(texto.length() > 500){
+			return -1;
+		}
+
 		return this.dicas.get(posicao).adicionarElementoTexto(texto);
 	}
 
@@ -48,7 +52,7 @@ public class DicaController {
 	 * @return O valor do bônus calculado para o elemento de multimídia adicionado.
 	 * @throws IndexOutOfBoundsException Se a posição for fora dos limites da lista.
 	 */
-	public double adicionarElementoMultimidiaDica(int posicao, String link, String cabecalho, int tempo) {
+	public int adicionarElementoMultimidiaDica(int posicao, String link, String cabecalho, int tempo) {
 		return this.dicas.get(posicao).adicionarElementoMultimidia(link, cabecalho, tempo);
 	}
 
@@ -64,7 +68,7 @@ public class DicaController {
 	 * @return O valor do bônus calculado para o elemento de referência adicionado.
 	 * @throws IndexOutOfBoundsException Se a posição for inválida (fora dos limites da lista).
 	 */
-	public double adicionarElementoReferenciaDica(int posicao, String titulo, String fonte, int ano, boolean conferida, int importancia) {
+	public int adicionarElementoReferenciaDica(int posicao, String titulo, String fonte, int ano, boolean conferida, int importancia) {
 		return this.dicas.get(posicao).adicionarElementoReferencia(titulo, fonte, conferida, ano, importancia);
 	}
 
