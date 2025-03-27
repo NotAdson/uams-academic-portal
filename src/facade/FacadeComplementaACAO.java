@@ -1,7 +1,5 @@
 package facade;
 
-import java.util.List;
-
 import atividade.AtividadeController;
 import dica.DicaController;
 import relatorio.RelatorioController;
@@ -36,7 +34,9 @@ public class FacadeComplementaACAO {
 	}
 	public boolean adicionarElementoTextoDica(String cpf, String senha, int posicao, String texto) {
 		controladorUsuario.autenticarUsuario(cpf, senha);
-		controladorUsuario.adicionarBonus(cpf, controladorDica.adicionarElemetoTextoDica(posicao, texto));
+		int result = controladorDica.adicionarElemetoTextoDica(posicao, texto);
+		if(result == -1) return false;
+		controladorUsuario.adicionarBonus(cpf, result);
 		return true;
 	}
 	public boolean adicionarElementoMultimidiaDica(String cpf, String senha, int posicao, String link, String cabecalho, int tempo) {
