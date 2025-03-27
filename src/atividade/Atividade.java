@@ -3,7 +3,7 @@ package atividade;
 /**
  * A classe {@code Atividade} representa uma atividade que pode ser realizada por um estudante.
  */
-public class Atividade {
+public abstract class Atividade {
 	private int tempo;
 	private double creditos;
 	private String descricao, link, codigo, tipo;
