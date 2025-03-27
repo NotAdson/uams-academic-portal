@@ -3,7 +3,7 @@ package usuario;
 public class Usuario implements Comparable<Usuario>{
 	
 	private String cpf, matricula, senha, nome;
-	private double quantidadeBonus;
+	private int quantidadeBonus;
 
 	public Usuario(String cpf, String senha, String nome, String matricula){
 		this.cpf = cpf;
@@ -28,11 +28,11 @@ public class Usuario implements Comparable<Usuario>{
 		return this.matricula;
 	}
 
-	public double getBonus(){
+	public int getBonus(){
 		return this.quantidadeBonus;
 	}
 
-	public void setBonus(double bonus){
+	public void setBonus(int bonus){
 		this.quantidadeBonus = bonus;
 	}
 

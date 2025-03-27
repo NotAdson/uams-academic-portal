@@ -45,7 +45,7 @@ public class UsuarioController {
 		return this.usuarios.get(cpf).getNome();
 	}
 
-	public void adicionarBonus(String cpf, double bonus){
+	public void adicionarBonus(String cpf, int bonus){
 		Usuario atual = this.usuarios.get(cpf);
 
 		atual.setBonus(atual.getBonus() + bonus);
