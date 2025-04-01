@@ -2,6 +2,8 @@ package dica;
 
 import java.util.ArrayList;
 
+import usuario.UsuarioController;
+
 /**
  * A classe {@code DicaController} gerencia a criação e manipulação de dicas e seus anexos.
  * Ela mantém uma lista de dicas e fornece métodos para adicionar novas dicas e elementos (texto, multimídia e referência) a dicas existentes.
@@ -20,8 +22,9 @@ public class DicaController {
 	 * @param tema  O tema da dica.
 	 * @return A posição da dica na lista.
 	 */
-	public int adicionarDica(String nome, String tema) {
-		Dica dica = new Dica(nome, tema);
+	public int adicionarDica(String cpf, String senha, String tema, UsuarioController uc) {
+		uc.autenticarUsuario(cpf, senha);
+		Dica dica = new Dica(uc.getNomeUsuario(cpf), tema);
 		dicas.add(dica);
 		return dicas.size() - 1;
 	}
@@ -34,12 +37,15 @@ public class DicaController {
 	 * @return O valor do bônus calculado para o elemento de texto adicionado ou -1 caso não seja possível adicionar o texto.
 	 * @throws IndexOutOfBoundsException Se a posição for fora dos limites da lista.
 	 */
-	public int adicionarElemetoTextoDica(int posicao, String texto) {
+	public boolean adicionarElemetoTextoDica(String cpf, String senha, int posicao, String texto, UsuarioController uc) {	
+		uc.autenticarUsuario(cpf, senha);
 		if(texto.length() > 500){
-			return -1;
+			return false;
 		}
 
-		return this.dicas.get(posicao).adicionarElementoTexto(texto);
+		uc.adicionarBonus(cpf, this.dicas.get(posicao).adicionarElementoTexto(texto));
+
+		return true;
 	}
 
 	/**
@@ -52,8 +58,10 @@ public class DicaController {
 	 * @return O valor do bônus calculado para o elemento de multimídia adicionado.
 	 * @throws IndexOutOfBoundsException Se a posição for fora dos limites da lista.
 	 */
-	public int adicionarElementoMultimidiaDica(int posicao, String link, String cabecalho, int tempo) {
-		return this.dicas.get(posicao).adicionarElementoMultimidia(link, cabecalho, tempo);
+	public boolean adicionarElementoMultimidiaDica(String cpf, String senha, int posicao, String link, String cabecalho, int tempo, UsuarioController uc) {
+		uc.autenticarUsuario(cpf, senha);
+		uc.adicionarBonus(cpf, this.dicas.get(posicao).adicionarElementoMultimidia(link, cabecalho, tempo));
+		return true;
 	}
 
 	/**
@@ -68,8 +76,11 @@ public class DicaController {
 	 * @return O valor do bônus calculado para o elemento de referência adicionado.
 	 * @throws IndexOutOfBoundsException Se a posição for inválida (fora dos limites da lista).
 	 */
-	public int adicionarElementoReferenciaDica(int posicao, String titulo, String fonte, int ano, boolean conferida, int importancia) {
-		return this.dicas.get(posicao).adicionarElementoReferencia(titulo, fonte, conferida, ano, importancia);
+	public boolean adicionarElementoReferenciaDica(String cpf, String senha, int posicao, String titulo, String fonte, int ano, boolean conferida, int importancia, UsuarioController uc) {
+		uc.autenticarUsuario(cpf, senha);
+		uc.adicionarBonus(cpf, this.dicas.get(posicao).adicionarElementoReferencia(titulo, fonte, conferida, ano, importancia));
+
+		return true;
 	}
 
 	/**

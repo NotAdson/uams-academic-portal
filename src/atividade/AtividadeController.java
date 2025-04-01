@@ -7,6 +7,8 @@ import java.util.AbstractMap;
 
 import middleware.Validator;
 
+import usuario.UsuarioController;
+
 public class AtividadeController {
 	private final static int MAX_CREDITOS_MONITORIA = 16, MIN_SEMESTRE_MONITORIA = 1;
 	private final static int MAX_CREDITOS_ESTAGIO = 18, MIN_HORAS_ESTAGIO = 300;
@@ -31,9 +33,10 @@ public class AtividadeController {
 
 	}
 
-	public boolean alterarDescricaoAtividade(String codigo, String descricao){
+	public boolean alterarDescricaoAtividade(String cpf, String senha, String codigo, String descricao, UsuarioController uc){
+		uc.autenticarUsuario(cpf, senha);
+
 		Map.Entry<String, Integer> elemento;
-		String cpf;
 		int position;
 
 		try {
@@ -50,9 +53,10 @@ public class AtividadeController {
 		return true;
 	}
 
-	public boolean alterarComprovacaoAtividade(String codigo, String link){
+	public boolean alterarComprovacaoAtividade(String cpf, String senha, String codigo, String link, UsuarioController uc){
+		uc.autenticarUsuario(cpf, senha);
+
 		Map.Entry<String, Integer> elemento;
-		String cpf;
 		int position;
 
 		try {
@@ -61,7 +65,7 @@ public class AtividadeController {
 			return false;
 		}
 
-		cpf = elemento.getKey(); position = elemento.getValue();
+		position = elemento.getValue();
 		
 		if(this.atividades.containsKey(cpf) && (0 < position || position > this.atividades.get(cpf).size())) return false;
 
@@ -69,7 +73,9 @@ public class AtividadeController {
 		return true;
 	}
 
-	public String criarAtividadePesquisaExtensao(String cpf, int unidadeAcumulado, String subtipo){
+	public String criarAtividadePesquisaExtensao(String cpf, String senha, int unidadeAcumulado, String subtipo, UsuarioController uc){
+		uc.autenticarUsuario(cpf, senha);
+
 		if(!this.atividades.containsKey(cpf)) this.atividades.put(cpf, new ArrayList<>());
 
 		String codigo = cpf + "_" + this.atividades.get(cpf).size() + 1;
@@ -79,7 +85,9 @@ public class AtividadeController {
 		return codigo;
 	}
 
-	public String criarAtividadeEstagio(String cpf, int unidadeAcumulado, String empresa){
+	public String criarAtividadeEstagio(String cpf, String senha, int unidadeAcumulado, String empresa, UsuarioController uc){
+		uc.autenticarUsuario(cpf, senha);
+
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
 		Atividade estagio = new Estagio(codigo, unidadeAcumulado, empresa);
 		
@@ -91,7 +99,9 @@ public class AtividadeController {
 		return codigo;
 	}
 
-	public String criarAtividadeRepresentacao(String cpf, int unidadeAcumulado, String subtipo){
+	public String criarAtividadeRepresentacao(String cpf, String senha, int unidadeAcumulado, String subtipo, UsuarioController uc){
+		uc.autenticarUsuario(cpf, senha);
+
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
 		Atividade representacao = new Monitoria(codigo, unidadeAcumulado, subtipo);
 		
@@ -103,7 +113,9 @@ public class AtividadeController {
 		return codigo;
 	}
 
-	public String criarAtividadeMonitoria(String cpf, int unidadeAcumulado, String disciplina){
+	public String criarAtividadeMonitoria(String cpf, String senha, int unidadeAcumulado, String disciplina, UsuarioController uc){
+		uc.autenticarUsuario(cpf, senha);
+
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
 		Atividade monitoria = new Monitoria(codigo, unidadeAcumulado, disciplina);
 		
@@ -115,30 +127,22 @@ public class AtividadeController {
 		return codigo;
 	}
 
-	public int getCreditoAtividade(String cpf, String tipo){
-		int totalCreditos = 0;
-
-		for(Atividade atividade: this.atividades.get(cpf)){
-			if(atividade.getTipo().equals(tipo)) totalCreditos += atividade.getCreditos();
-		}
-
-		return Math.min(this.maximos.get(tipo), totalCreditos);
+	public int getCreditoAtividade(String cpf, String senha, String tipo, UsuarioController uc){
+		uc.autenticarUsuario(cpf, senha);
+		return this.calcularCreditoAtividade(cpf, tipo);
 	}
 
-	public String gerarMapaAtividade(String cpf, String tipo){
-		StringBuilder result = new StringBuilder();
-
-		result.append(this.getCreditoAtividade(cpf, tipo));
-
-		if(this.maximos.containsKey(tipo)) result.append("/").append(this.maximos.get(tipo));
-
-		return result.toString();
+	public String gerarMapaAtividade(String cpf, String senha, String tipo, UsuarioController uc){
+		uc.autenticarUsuario(cpf, senha);
+		return this.calcularMapaAtividade(cpf, tipo);
 	}
 
-	public String gerarMapaCreditos(String cpf){
+	public String gerarMapaCreditos(String cpf, String senha, UsuarioController uc){
+		uc.autenticarUsuario(cpf, senha);
+
 		StringBuilder result = new StringBuilder();
 		for(String tipo: this.maximos.keySet()){
-			result.append(this.gerarMapaAtividade(cpf, tipo));
+			result.append(this.calcularMapaAtividade(cpf, tipo));
 		}
 
 		return result.toString();
@@ -148,13 +152,14 @@ public class AtividadeController {
 		int total = 0;
 		
 		for(String tipo: this.maximos.keySet()){
-			total += this.getCreditoAtividade(cpf, tipo);
+			total += this.calcularCreditoAtividade(cpf, tipo);
 		}
 
 		return total;
 	}
 
-	public boolean isMetaAlcancada(String cpf){
+	public boolean isMetaAlcancada(String cpf, String senha, UsuarioController uc){
+		uc.autenticarUsuario(cpf, senha);
 		return this.getTotalCreditos(cpf) >= META_CREDITOS;
 	}
 
@@ -167,4 +172,25 @@ public class AtividadeController {
 		Map.Entry<String, Integer> result = new AbstractMap.SimpleEntry<>(splited[0], position);
 		return result;
 	}
+
+	private int calcularCreditoAtividade(String cpf, String tipo){
+		int totalCreditos = 0;
+
+		for(Atividade atividade: this.atividades.get(cpf)){
+			if(atividade.getTipo().equals(tipo)) totalCreditos += atividade.getCreditos();
+		}
+
+		return Math.min(this.maximos.get(tipo), totalCreditos);
+	}
+
+	private String calcularMapaAtividade(String cpf, String tipo){
+		StringBuilder result = new StringBuilder();
+
+		result.append(this.calcularCreditoAtividade(cpf, tipo));
+
+		if(this.maximos.containsKey(tipo)) result.append("/").append(this.maximos.get(tipo));
+
+		return result.toString();
+	}
+
 }

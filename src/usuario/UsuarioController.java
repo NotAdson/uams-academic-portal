@@ -37,6 +37,7 @@ public class UsuarioController {
 	}
 
 	public boolean alterarSenhaUsuario(String cpf, String senha){
+		this.autenticarUsuario(cpf, senha);
 		this.usuarios.get(cpf).setSenha(senha);
 		return true;
 	}
