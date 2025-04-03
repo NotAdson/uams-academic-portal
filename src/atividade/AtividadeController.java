@@ -18,13 +18,12 @@ public class AtividadeController {
 	private final static int META_CREDITOS = 22;
 
 	private HashMap<String, Integer> maximos;
-
 	private HashMap<String, ArrayList<Atividade>> atividades;
 	
 	public AtividadeController(){
 		this.atividades = new HashMap<String, ArrayList<Atividade>>();
 
-		HashMap<String, Integer> maximos = new HashMap<>();
+		maximos = new HashMap<>();
 		
 		maximos.put("PESQUISA_EXTENSAO", MAX_CREDITOS_EXTENSAO);
 		maximos.put("MONITORIA", MAX_CREDITOS_MONITORIA);
@@ -34,6 +33,8 @@ public class AtividadeController {
 	}
 
 	public boolean alterarDescricaoAtividade(String cpf, String senha, String codigo, String descricao, UsuarioController uc){
+		Validator.verifyStringBlank(codigo, "CODIGO");
+		Validator.verifyStringBlank(descricao, "DESCRIÇÃO");
 		uc.autenticarUsuario(cpf, senha);
 
 		Map.Entry<String, Integer> elemento;
@@ -54,6 +55,8 @@ public class AtividadeController {
 	}
 
 	public boolean alterarComprovacaoAtividade(String cpf, String senha, String codigo, String link, UsuarioController uc){
+		Validator.verifyStringBlank(codigo, "CODIGO");
+		Validator.verifyStringBlank(link, "LINK");
 		uc.autenticarUsuario(cpf, senha);
 
 		Map.Entry<String, Integer> elemento;
@@ -74,8 +77,9 @@ public class AtividadeController {
 	}
 
 	public String criarAtividadePesquisaExtensao(String cpf, String senha, int unidadeAcumulado, String subtipo, UsuarioController uc){
+		Validator.verifyStringBlank(subtipo, "SUBTIPO");
 		uc.autenticarUsuario(cpf, senha);
-
+		
 		if(!this.atividades.containsKey(cpf)) this.atividades.put(cpf, new ArrayList<>());
 
 		String codigo = cpf + "_" + this.atividades.get(cpf).size() + 1;
@@ -86,7 +90,10 @@ public class AtividadeController {
 	}
 
 	public String criarAtividadeEstagio(String cpf, String senha, int unidadeAcumulado, String empresa, UsuarioController uc){
+		Validator.verifyStringBlank(empresa, "EMPRESA");
 		uc.autenticarUsuario(cpf, senha);
+
+		if(!this.atividades.containsKey(cpf)) this.atividades.put(cpf, new ArrayList<>());
 
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
 		Atividade estagio = new Estagio(codigo, unidadeAcumulado, empresa);
@@ -100,10 +107,13 @@ public class AtividadeController {
 	}
 
 	public String criarAtividadeRepresentacao(String cpf, String senha, int unidadeAcumulado, String subtipo, UsuarioController uc){
+		Validator.verifyStringBlank(subtipo, "SUBTIPO");
 		uc.autenticarUsuario(cpf, senha);
 
+		if(!this.atividades.containsKey(cpf)) this.atividades.put(cpf, new ArrayList<>());
+
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
-		Atividade representacao = new Monitoria(codigo, unidadeAcumulado, subtipo);
+		Atividade representacao = new RepresentacaoEstudantil(codigo, unidadeAcumulado, subtipo);
 		
 		if(unidadeAcumulado < MIN_ANOS_REPRESENTACAO_ESTUDANTIL) return "ABAIXO DO MINIMO DE ANOS";
 		
@@ -114,7 +124,10 @@ public class AtividadeController {
 	}
 
 	public String criarAtividadeMonitoria(String cpf, String senha, int unidadeAcumulado, String disciplina, UsuarioController uc){
+		Validator.verifyStringBlank(disciplina, "DISCIPLINA");
 		uc.autenticarUsuario(cpf, senha);
+
+		if(!this.atividades.containsKey(cpf)) this.atividades.put(cpf, new ArrayList<>());
 
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
 		Atividade monitoria = new Monitoria(codigo, unidadeAcumulado, disciplina);
@@ -128,11 +141,14 @@ public class AtividadeController {
 	}
 
 	public int getCreditoAtividade(String cpf, String senha, String tipo, UsuarioController uc){
+		Validator.verifyStringBlank(tipo, "TIPO");
 		uc.autenticarUsuario(cpf, senha);
+
 		return this.calcularCreditoAtividade(cpf, tipo);
 	}
 
 	public String gerarMapaAtividade(String cpf, String senha, String tipo, UsuarioController uc){
+		Validator.verifyStringBlank(tipo, "TIPO");
 		uc.autenticarUsuario(cpf, senha);
 		return this.calcularMapaAtividade(cpf, tipo);
 	}
@@ -142,13 +158,14 @@ public class AtividadeController {
 
 		StringBuilder result = new StringBuilder();
 		for(String tipo: this.maximos.keySet()){
-			result.append(this.calcularMapaAtividade(cpf, tipo));
+			result.append(tipo).append(": ").append(this.calcularMapaAtividade(cpf, tipo)).append("\n");
 		}
 
 		return result.toString();
 	}
 
 	public int getTotalCreditos(String cpf){
+		Validator.verifyStringBlank(cpf, "CPF");
 		int total = 0;
 		
 		for(String tipo: this.maximos.keySet()){
@@ -174,6 +191,13 @@ public class AtividadeController {
 	}
 
 	private int calcularCreditoAtividade(String cpf, String tipo){
+		Validator.verifyStringBlank(cpf, "CPF");
+		Validator.verifyStringBlank(tipo, "TIPO");
+		
+		if(!this.atividades.containsKey(cpf)){
+			return 0;
+		}
+
 		int totalCreditos = 0;
 
 		for(Atividade atividade: this.atividades.get(cpf)){

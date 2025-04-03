@@ -7,14 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class DicaTest {
-	private Dica dica;
-	
-	@BeforeEach
-	void setup() {
-		this.dica = new Dica("Jorge", "Façam os testes");
-	}
-	
+class DicaTest {	
 	@Test
 	void testConstrutorDica() {
 		new Dica("Jorge", "Façam os testes");

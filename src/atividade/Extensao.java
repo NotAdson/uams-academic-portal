@@ -9,9 +9,8 @@ public class Extensao extends Atividade{
 	private String subtipo;
 
 	public Extensao(String codigo, int tempo, String subtipo){
-		super(codigo, "PESQUISA_EXTENSAO", 12 / 10, tempo);
+		super(codigo, "PESQUISA_EXTENSAO", 10.0 / 12.0, tempo);
 
-		Validator.verifyStringBlank(codigo, "CODIGO");
 		Validator.verifyStringBlank(subtipo, "SUBTIPO");
 		
 		if(tempo < 0){

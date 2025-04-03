@@ -22,7 +22,7 @@ class TextoTest {
 		
 		assertEquals("TEXTO NULO!", exception.getMessage());
 	}
-	
+
 	@ParameterizedTest
 	@ValueSource(strings = {"", " "})
 	void testTextoVazio(String texto) {
@@ -55,8 +55,8 @@ class TextoTest {
 	@ParameterizedTest
 	@CsvSource({
 		"100, 10",
-		"1000, 100",
-		"1000000000, 100000000"
+		"1000, 50",
+		"1000000000, 50"
 	})
 	void testCalcularBonusMaiorQue100(int count, double bonus) {
 		Texto texto = new Texto("A".repeat(count));

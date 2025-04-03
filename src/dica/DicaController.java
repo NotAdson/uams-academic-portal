@@ -2,6 +2,7 @@ package dica;
 
 import java.util.ArrayList;
 
+import middleware.Validator;
 import usuario.UsuarioController;
 
 /**
@@ -23,7 +24,9 @@ public class DicaController {
 	 * @return A posição da dica na lista.
 	 */
 	public int adicionarDica(String cpf, String senha, String tema, UsuarioController uc) {
+		Validator.verifyStringBlank(tema, "TEMA");
 		uc.autenticarUsuario(cpf, senha);
+
 		Dica dica = new Dica(uc.getNomeUsuario(cpf), tema);
 		dicas.add(dica);
 		return dicas.size() - 1;
@@ -38,7 +41,9 @@ public class DicaController {
 	 * @throws IndexOutOfBoundsException Se a posição for fora dos limites da lista.
 	 */
 	public boolean adicionarElemetoTextoDica(String cpf, String senha, int posicao, String texto, UsuarioController uc) {	
+		Validator.verifyStringBlank(texto, "TEXTO");
 		uc.autenticarUsuario(cpf, senha);
+
 		if(texto.length() > 500){
 			return false;
 		}
@@ -59,7 +64,10 @@ public class DicaController {
 	 * @throws IndexOutOfBoundsException Se a posição for fora dos limites da lista.
 	 */
 	public boolean adicionarElementoMultimidiaDica(String cpf, String senha, int posicao, String link, String cabecalho, int tempo, UsuarioController uc) {
+		Validator.verifyStringBlank(link, "LINK");
+		Validator.verifyStringBlank(cabecalho, "CABEÇALHO");
 		uc.autenticarUsuario(cpf, senha);
+
 		uc.adicionarBonus(cpf, this.dicas.get(posicao).adicionarElementoMultimidia(link, cabecalho, tempo));
 		return true;
 	}
@@ -78,8 +86,10 @@ public class DicaController {
 	 */
 	public boolean adicionarElementoReferenciaDica(String cpf, String senha, int posicao, String titulo, String fonte, int ano, boolean conferida, int importancia, UsuarioController uc) {
 		uc.autenticarUsuario(cpf, senha);
-		uc.adicionarBonus(cpf, this.dicas.get(posicao).adicionarElementoReferencia(titulo, fonte, conferida, ano, importancia));
+		Validator.verifyStringBlank(titulo, "TITULO");
+		Validator.verifyStringBlank(fonte, "FONTE");
 
+		uc.adicionarBonus(cpf, this.dicas.get(posicao).adicionarElementoReferencia(titulo, fonte, conferida, ano, importancia));
 		return true;
 	}
 

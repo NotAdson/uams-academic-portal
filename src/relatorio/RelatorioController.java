@@ -23,15 +23,7 @@ public class RelatorioController {
 		relatorio.append(ac.gerarMapaCreditos(cpf, senha, uc)).append("\n");
 		relatorio.append("TOTAL: ").append(ac.getTotalCreditos(cpf));
 
-		if(!this.relatorios.containsKey(cpf)){
-			this.relatorios.put(cpf, new HashMap<>());
-		}
-		
-		LocalDate data = LocalDate.now();
-		String result = relatorio.toString();
-		this.relatorios.get(cpf).put(data.toString(), result);
-
-		return result;
+		return relatorio.toString();	
 	}
 
 	public String gerarRelatorioFinalPorAtividade(String cpf, String senha, String tipo, UsuarioController uc, AtividadeController ac){
@@ -42,15 +34,7 @@ public class RelatorioController {
 		relatorio.append(uc.getUsuario(cpf)).append("\n");
 		relatorio.append(ac.getCreditoAtividade(cpf, senha, tipo, uc)).append("\n");
 
-		if(!this.relatorios.containsKey(cpf)){
-			this.relatorios.put(cpf, new HashMap<>());
-		}
-		
-		LocalDate data = LocalDate.now();
-		String result = relatorio.toString();
-		this.relatorios.get(cpf).put(data.toString(), result);
-
-		return result;
+		return relatorio.toString();
 	}
 
 	public String gerarRelatorioParcial(String cpf, String senha, boolean salvar, UsuarioController uc, AtividadeController ac){

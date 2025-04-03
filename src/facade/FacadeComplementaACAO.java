@@ -25,7 +25,7 @@ public class FacadeComplementaACAO {
 		return controladorUsuario.exibirUsuarios();
 	}
 	public boolean alterarSenhaEstudante(String cpf, String senhaAntiga, String novaSenha) {
-		return controladorUsuario.alterarSenhaUsuario(cpf, novaSenha);
+		return controladorUsuario.alterarSenhaUsuario(cpf, senhaAntiga, novaSenha);
 	}
 	public int adicionarDica(String cpf, String senha, String tema) {
 		return controladorDica.adicionarDica(cpf, senha, tema, controladorUsuario);

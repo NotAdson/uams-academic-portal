@@ -1,5 +1,7 @@
 package atividade;
 
+import middleware.Validator;
+
 /**
  * A classe {@code Atividade} representa uma atividade que pode ser realizada por um estudante.
  */
@@ -9,6 +11,7 @@ public abstract class Atividade {
 	private String descricao, link, codigo, tipo;
 
 	public Atividade(String codigo, String tipo, double creditos, int tempo){
+		Validator.verifyStringBlank(codigo, "CODIGO");
 		this.codigo = codigo;
 		this.descricao = "";
 		this.link = "";

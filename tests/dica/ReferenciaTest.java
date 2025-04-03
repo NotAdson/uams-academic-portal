@@ -22,6 +22,7 @@ class ReferenciaTest {
 		assertEquals("TITULO NULO!", exception.getMessage());
 	}
 	
+	@Test
 	void testConstrutorFonteNulo() {
 		NullPointerException exception = assertThrows(NullPointerException.class, () -> {
 			new Referencia("Vaca amarela", null, false, 2015, 5);

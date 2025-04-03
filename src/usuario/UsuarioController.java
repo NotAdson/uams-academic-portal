@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class UsuarioController {
+import middleware.Validator;
 
+public class UsuarioController {
+	/*
+	 * Falta validações de argumento
+	 * Verificar digitos CPF
+	 */
 	private HashMap<String, Usuario> usuarios;
 
 	public UsuarioController(){
@@ -13,13 +18,16 @@ public class UsuarioController {
 	}
 
 	public void autenticarUsuario(String cpf, String senha){
+		Validator.verifyStringBlank(cpf, "CPF");
+		Validator.verifyStringBlank(senha, "SENHA");
+
 		if(!this.usuarios.containsKey(cpf) || !this.usuarios.get(cpf).verificaSenha(senha)){
 			throw new IllegalArgumentException("CPF OU SENHA INCORRETOS!");
 		}
 	}
 
 	public boolean criarUsuario(String nome, String cpf, String senha, String matricula){
-		if(usuarios.containsKey(cpf) || senha.length() != 8 || cpf.length() != 11){
+		if(usuarios.containsKey(cpf) || senha.length() != 8 || cpf.length() != 14){
 			return false;
 		}
 
@@ -36,9 +44,9 @@ public class UsuarioController {
 		return true;
 	}
 
-	public boolean alterarSenhaUsuario(String cpf, String senha){
+	public boolean alterarSenhaUsuario(String cpf, String senha, String novaSenha){
 		this.autenticarUsuario(cpf, senha);
-		this.usuarios.get(cpf).setSenha(senha);
+		this.usuarios.get(cpf).setSenha(novaSenha);
 		return true;
 	}
 

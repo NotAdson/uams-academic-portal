@@ -9,9 +9,8 @@ public class Estagio extends Atividade{
 	private String empresa;
 
 	public Estagio(String codigo, int tempo, String empresa){
-		super(codigo, "ESTAGIO", 60 / 1, tempo);
+		super(codigo, "ESTAGIO", 1.0 / 60.0, tempo);
 
-		Validator.verifyStringBlank(codigo, "CODIGO");
 		Validator.verifyStringBlank(empresa, "EMPRESA");
 		
 		if(tempo < 0){

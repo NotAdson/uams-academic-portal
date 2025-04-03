@@ -9,9 +9,8 @@ public class Monitoria extends Atividade{
 	private String disciplina;
 
 	public Monitoria(String codigo, int tempo, String disciplina){
-		super(codigo, "MONITORIA", 4, tempo);
+		super(codigo, "MONITORIA", 4.0, tempo);
 
-		Validator.verifyStringBlank(codigo, "CODIGO");
 		Validator.verifyStringBlank(disciplina, "DISCIPLINA");
 		
 		if(tempo < 0){

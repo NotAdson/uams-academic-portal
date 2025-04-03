@@ -11,7 +11,6 @@ public class RepresentacaoEstudantil extends Atividade{
 	public RepresentacaoEstudantil(String codigo, int tempo, String subTipo){
 		super(codigo, "REPRESENTACAO_ESTUDANTIL", 2, tempo);
 
-		Validator.verifyStringBlank(codigo, "CODIGO");
 		Validator.verifyStringBlank(subTipo, "SUBTIPO");
 		
 		if(tempo < 0){
