@@ -42,4 +42,15 @@ public class Validator {
 			throw new IllegalArgumentException(nomeArg + " VAZIO!");
 		}
 	}
+	
+	public static int countDigit(String string) {
+		int counter = 0;
+		for(int i = 0; i < string.length(); i++) {
+			if(Character.isDigit(string.charAt(i))){
+				counter++;
+			}
+		}
+		
+		return counter;
+	}
 }

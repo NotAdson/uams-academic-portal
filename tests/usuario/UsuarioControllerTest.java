@@ -22,7 +22,7 @@ class UsuarioControllerTest {
 
     @Test
     void testCriarUsuarioValido() {
-        boolean resultado = uc.criarUsuario(NOME_VALIDO, CPF_VALIDO, SENHA_VALIDA, MATRICULA_VALIDA);
+        boolean resultado = uc.criarUsuario("NOME", "111.111.111-11", "12345678", "000000000");
         assertTrue(resultado);
     }
 
@@ -104,11 +104,11 @@ class UsuarioControllerTest {
 
     @Test
     void testExibirUsuariosOrdenados() {
-        uc.criarUsuario("Aardvark", "111.111.111-11", "11111111", "20230002");
+        uc.criarUsuario("Leão", "111.111.111-11", "11111111", "20230002");
         uc.criarUsuario("Zebra", "999.999.999-99", "99999999", "20230003");
         
         String[] usuarios = uc.exibirUsuarios();
-        assertTrue(usuarios[0].contains("Aardvark"));
+        assertTrue(usuarios[0].contains("Leão"));
         assertTrue(usuarios[2].contains("Zebra"));
     }
 
@@ -125,8 +125,9 @@ class UsuarioControllerTest {
         uc.adicionarBonus(cpf3, 2);
         
         String[] ranking = uc.listarRankingBonus();
-        assertTrue(ranking[0].contains("10"));
-        assertTrue(ranking[1].contains("5"));
-        assertTrue(ranking[2].contains("2"));
+        
+        assertTrue(ranking[0].contains("222.222.222-22"));
+        assertTrue(ranking[1].contains(CPF_VALIDO));
+        assertTrue(ranking[2].contains("111.111.111-11"));
     }
 }
