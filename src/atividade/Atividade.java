@@ -44,6 +44,14 @@ public abstract class Atividade {
 		return this.tipo;
 	}
 
+	/**
+	 * Calcula e retorna o total de créditos obtidos na atividade.
+	 * 
+	 * O cálculo é realizado multiplicando os créditos base pelo tempo investido
+	 * na atividade, retornando o valor como inteiro.
+	 * 
+	 * @return Total de créditos calculados (créditos base × tempo)
+	 */
 	public int getCreditos(){
 		return (int)(this.creditos * this.tempo);
 	}

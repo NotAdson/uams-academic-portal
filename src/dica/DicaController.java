@@ -17,15 +17,16 @@ public class DicaController {
 	}
 
 	/**
-	 * Adiciona uma nova dica à lista de dicas.
-	 *
-	 * @param nome  O nome da dica.
-	 * @param tema  O tema da dica.
-	 * @return A posição da dica na lista.
+	 * Cria e registra uma nova dica no sistema.
+	 * 
+	 * @param cpf Identificação do usuário criador
+	 * @param tema Tema principal da dica (não pode ser vazio)
+	 * @param uc Controlador de usuários para validação
+	 * @return Índice da nova dica na lista interna
+	 * @throws IllegalArgumentException Se o tema for inválido
 	 */
-	public int adicionarDica(String cpf, String senha, String tema, UsuarioController uc) {
+	public int adicionarDica(String cpf, String tema, UsuarioController uc) {
 		Validator.verifyStringBlank(tema, "TEMA");
-		uc.autenticarUsuario(cpf, senha);
 
 		Dica dica = new Dica(uc.getNomeUsuario(cpf), tema);
 		dicas.add(dica);
@@ -33,18 +34,18 @@ public class DicaController {
 	}
 
 	/**
-	 * Adiciona um elemento do tipo texto a uma dica existente.
-	 *
-	 * @param posicao A posição da dica na lista.
-	 * @param texto   O conteúdo textual a ser adicionado.
-	 * @return O valor do bônus calculado para o elemento de texto adicionado ou -1 caso não seja possível adicionar o texto.
-	 * @throws IndexOutOfBoundsException Se a posição for fora dos limites da lista.
+	 * Adiciona conteúdo textual a uma dica existente.
+	 * 
+	 * @param cpf Identificação do usuário
+	 * @param posicao Índice da dica alvo
+	 * @param texto Conteúdo a ser adicionado (máximo 500 caracteres)
+	 * @param uc Controlador de usuários para registro de bônus
+	 * @return Status da operação (true = sucesso, false = texto muito longo ou posição não existe)
 	 */
-	public boolean adicionarElemetoTextoDica(String cpf, String senha, int posicao, String texto, UsuarioController uc) {	
+	public boolean adicionarElemetoTextoDica(String cpf, int posicao, String texto, UsuarioController uc) {	
 		Validator.verifyStringBlank(texto, "TEXTO");
-		uc.autenticarUsuario(cpf, senha);
 
-		if(texto.length() > 500){
+		if(texto.length() > 500 || 0 > posicao || posicao >= this.dicas.size()){
 			return false;
 		}
 
@@ -54,40 +55,45 @@ public class DicaController {
 	}
 
 	/**
-	 * Adiciona um elemento do tipo multimídia a uma dica existente.
-	 *
-	 * @param posicao   A posição da dica na lista.
-	 * @param link      O link para o conteúdo multimídia.
-	 * @param cabecalho O cabeçalho descritivo do conteúdo multimídia.
-	 * @param tempo     A duração do conteúdo multimídia em segundos.
-	 * @return O valor do bônus calculado para o elemento de multimídia adicionado.
-	 * @throws IndexOutOfBoundsException Se a posição for fora dos limites da lista.
+	 * Adiciona conteúdo multimídia a uma dica existente.
+	 * 
+	 * @param cpf Identificação do usuário
+	 * @param posicao Índice da dica alvo
+	 * @param link URL do conteúdo
+	 * @param cabecalho Descrição do conteúdo
+	 * @param tempo Duração em segundos
+	 * @param uc Controlador de usuários para registro de bônus
+	 * @return Status da operação (true = sucesso, false = posição inválida)
 	 */
-	public boolean adicionarElementoMultimidiaDica(String cpf, String senha, int posicao, String link, String cabecalho, int tempo, UsuarioController uc) {
+	public boolean adicionarElementoMultimidiaDica(String cpf, int posicao, String link, String cabecalho, int tempo, UsuarioController uc) {
 		Validator.verifyStringBlank(link, "LINK");
 		Validator.verifyStringBlank(cabecalho, "CABEÇALHO");
-		uc.autenticarUsuario(cpf, senha);
+		
+		if(0 > posicao || posicao >= this.dicas.size()) return false;
 
 		uc.adicionarBonus(cpf, this.dicas.get(posicao).adicionarElementoMultimidia(link, cabecalho, tempo));
 		return true;
 	}
 
+
 	/**
-	 * Adiciona um elemento do tipo referência a uma dica existente.
-	 *
-	 * @param posicao    A posição da dica na lista (índice).
-	 * @param titulo     O título da referência.
-	 * @param fonte      A fonte da referência.
-	 * @param ano        O ano de publicação da referência.
-	 * @param conferida  Indica se a referência foi verificada.
-	 * @param importancia A relevância da referência (1 a 5).
-	 * @return O valor do bônus calculado para o elemento de referência adicionado.
-	 * @throws IndexOutOfBoundsException Se a posição for inválida (fora dos limites da lista).
+	 * Adiciona referência bibliográfica a uma dica existente.
+	 * 
+	 * @param cpf Identificação do usuário
+	 * @param posicao Índice da dica alvo
+	 * @param titulo Título da referência
+	 * @param fonte Origem da referência
+	 * @param ano Ano de publicação
+	 * @param conferida Status de verificação
+	 * @param importancia Nível de relevância (1-5)
+	 * @param uc Controlador de usuários para registro de bônus
+	 * @return Status sempre verdadeiro quando válido
 	 */
-	public boolean adicionarElementoReferenciaDica(String cpf, String senha, int posicao, String titulo, String fonte, int ano, boolean conferida, int importancia, UsuarioController uc) {
-		uc.autenticarUsuario(cpf, senha);
+	public boolean adicionarElementoReferenciaDica(String cpf, int posicao, String titulo, String fonte, int ano, boolean conferida, int importancia, UsuarioController uc) {
 		Validator.verifyStringBlank(titulo, "TITULO");
 		Validator.verifyStringBlank(fonte, "FONTE");
+		
+		if(0 > posicao || posicao >= this.dicas.size()) return false;
 
 		uc.adicionarBonus(cpf, this.dicas.get(posicao).adicionarElementoReferencia(titulo, fonte, conferida, ano, importancia));
 		return true;

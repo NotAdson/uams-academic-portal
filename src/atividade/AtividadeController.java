@@ -7,8 +7,13 @@ import java.util.AbstractMap;
 
 import middleware.Validator;
 
-import usuario.UsuarioController;
-
+/**
+ * Controller responsável por gerenciar atividades acadêmicas de diferentes tipos,
+ * incluindo cálculo de créditos, verificação de metas e manipulação de atividades.
+ * 
+ * Mantém registros de atividades organizados por CPF do estudante e oferece métodos
+ * para criação, modificação e consulta de atividades acadêmicas.
+ */
 public class AtividadeController {
 	private final static int MAX_CREDITOS_MONITORIA = 16, MIN_SEMESTRE_MONITORIA = 1;
 	private final static int MAX_CREDITOS_ESTAGIO = 18, MIN_HORAS_ESTAGIO = 300;
@@ -32,10 +37,17 @@ public class AtividadeController {
 
 	}
 
-	public boolean alterarDescricaoAtividade(String cpf, String senha, String codigo, String descricao, UsuarioController uc){
+	/**
+	 * Altera a descrição de uma atividade existente.
+	 * 
+	 * @param cpf CPF do estudante dono da atividade
+	 * @param codigo Código único da atividade no formato "CPF_INDEX"
+	 * @param descricao Nova descrição para a atividade
+	 * @return true se a alteração foi bem-sucedida, false caso contrário
+	 */
+	public boolean alterarDescricaoAtividade(String cpf, String codigo, String descricao){
 		Validator.verifyStringBlank(codigo, "CODIGO");
 		Validator.verifyStringBlank(descricao, "DESCRIÇÃO");
-		uc.autenticarUsuario(cpf, senha);
 
 		Map.Entry<String, Integer> elemento;
 		int position;
@@ -54,10 +66,17 @@ public class AtividadeController {
 		return true;
 	}
 
-	public boolean alterarComprovacaoAtividade(String cpf, String senha, String codigo, String link, UsuarioController uc){
+	/**
+	 * Altera o link de comprovação de uma atividade existente.
+	 * 
+	 * @param cpf CPF do estudante dono da atividade
+	 * @param codigo Código único da atividade no formato "CPF_INDEX"
+	 * @param link Novo link de comprovação
+	 * @return true se a alteração foi bem-sucedida, false caso contrário
+	 */
+	public boolean alterarComprovacaoAtividade(String cpf, String codigo, String link){
 		Validator.verifyStringBlank(codigo, "CODIGO");
 		Validator.verifyStringBlank(link, "LINK");
-		uc.autenticarUsuario(cpf, senha);
 
 		Map.Entry<String, Integer> elemento;
 		int position;
@@ -76,9 +95,16 @@ public class AtividadeController {
 		return true;
 	}
 
-	public String criarAtividadePesquisaExtensao(String cpf, String senha, int unidadeAcumulado, String subtipo, UsuarioController uc){
+	/**
+	 * Cria uma nova atividade do tipo Pesquisa e Extensão.
+	 * 
+	 * @param cpf CPF do estudante
+	 * @param unidadeAcumulado Quantidade de unidades acumuladas
+	 * @param subtipo Subtipo da atividade de pesquisa/extensão
+	 * @return Código da atividade criada ou mensagem de erro
+	 */
+	public String criarAtividadePesquisaExtensao(String cpf, int unidadeAcumulado, String subtipo){
 		Validator.verifyStringBlank(subtipo, "SUBTIPO");
-		uc.autenticarUsuario(cpf, senha);
 		
 		if(!this.atividades.containsKey(cpf)) this.atividades.put(cpf, new ArrayList<>());
 
@@ -89,9 +115,16 @@ public class AtividadeController {
 		return codigo;
 	}
 
-	public String criarAtividadeEstagio(String cpf, String senha, int unidadeAcumulado, String empresa, UsuarioController uc){
+	/**
+	 * Cria uma nova atividade do tipo Estágio.
+	 * 
+	 * @param cpf CPF do estudante
+	 * @param unidadeAcumulado Horas acumuladas no estágio
+	 * @param empresa Nome da empresa onde o estágio foi realizado
+	 * @return Código da atividade criada ou mensagem de erro se horas forem insuficientes
+	 */
+	public String criarAtividadeEstagio(String cpf, int unidadeAcumulado, String empresa){
 		Validator.verifyStringBlank(empresa, "EMPRESA");
-		uc.autenticarUsuario(cpf, senha);
 
 		if(!this.atividades.containsKey(cpf)) this.atividades.put(cpf, new ArrayList<>());
 
@@ -106,9 +139,16 @@ public class AtividadeController {
 		return codigo;
 	}
 
-	public String criarAtividadeRepresentacao(String cpf, String senha, int unidadeAcumulado, String subtipo, UsuarioController uc){
+	/**
+	 * Cria uma nova atividade do tipo Representação Estudantil.
+	 * 
+	 * @param cpf CPF do estudante
+	 * @param unidadeAcumulado Anos de representação acumulados
+	 * @param subtipo Tipo de representação estudantil
+	 * @return Código da atividade criada ou mensagem de erro se anos forem insuficientes
+	 */
+	public String criarAtividadeRepresentacao(String cpf, int unidadeAcumulado, String subtipo){
 		Validator.verifyStringBlank(subtipo, "SUBTIPO");
-		uc.autenticarUsuario(cpf, senha);
 
 		if(!this.atividades.containsKey(cpf)) this.atividades.put(cpf, new ArrayList<>());
 
@@ -123,9 +163,16 @@ public class AtividadeController {
 		return codigo;
 	}
 
-	public String criarAtividadeMonitoria(String cpf, String senha, int unidadeAcumulado, String disciplina, UsuarioController uc){
+	/**
+	 * Cria uma nova atividade do tipo Monitoria.
+	 * 
+	 * @param cpf CPF do estudante
+	 * @param unidadeAcumulado Semestres de monitoria acumulados
+	 * @param disciplina Nome da disciplina associada à monitoria
+	 * @return Código da atividade criada ou mensagem de erro se semestres forem insuficientes
+	 */
+	public String criarAtividadeMonitoria(String cpf, int unidadeAcumulado, String disciplina){
 		Validator.verifyStringBlank(disciplina, "DISCIPLINA");
-		uc.autenticarUsuario(cpf, senha);
 
 		if(!this.atividades.containsKey(cpf)) this.atividades.put(cpf, new ArrayList<>());
 
@@ -140,22 +187,40 @@ public class AtividadeController {
 		return codigo;
 	}
 
-	public int getCreditoAtividade(String cpf, String senha, String tipo, UsuarioController uc){
+	/**
+	 * Obtém o total de créditos acumulados para um tipo específico de atividade.
+	 * 
+	 * @param cpf CPF do estudante
+	 * @param tipo Tipo de atividade (PESQUISA_EXTENSAO, MONITORIA, ESTAGIO, etc.)
+	 * @return Total de créditos acumulados para o tipo especificado
+	 */
+	public int getCreditoAtividade(String cpf, String tipo){
 		Validator.verifyStringBlank(tipo, "TIPO");
-		uc.autenticarUsuario(cpf, senha);
 
 		return this.calcularCreditoAtividade(cpf, tipo);
 	}
-
-	public String gerarMapaAtividade(String cpf, String senha, String tipo, UsuarioController uc){
+	
+	/**
+	 * Gera um mapa de créditos para um tipo específico de atividade no formato "X/Y",
+	 * onde X são créditos acumulados e Y é o limite máximo para o tipo.
+	 * 
+	 * @param cpf CPF do estudante
+	 * @param tipo Tipo de atividade
+	 * @return String formatada com o mapa de créditos
+	 */
+	public String gerarMapaAtividade(String cpf, String tipo){
 		Validator.verifyStringBlank(tipo, "TIPO");
-		uc.autenticarUsuario(cpf, senha);
+
 		return this.calcularMapaAtividade(cpf, tipo);
 	}
 
-	public String gerarMapaCreditos(String cpf, String senha, UsuarioController uc){
-		uc.autenticarUsuario(cpf, senha);
-
+	/**
+	 * Gera um relatório completo com o mapa de créditos para todos os tipos de atividades.
+	 * 
+	 * @param cpf CPF do estudante
+	 * @return String formatada com o mapa de créditos para todas as atividades
+	 */
+	public String gerarMapaCreditos(String cpf){
 		StringBuilder result = new StringBuilder();
 		for(String tipo: this.maximos.keySet()){
 			result.append(tipo).append(": ").append(this.calcularMapaAtividade(cpf, tipo)).append("\n");
@@ -163,7 +228,13 @@ public class AtividadeController {
 
 		return result.toString();
 	}
-
+	
+	/**
+	 * Calcula o total de créditos acumulados em todas as atividades.
+	 * 
+	 * @param cpf CPF do estudante
+	 * @return Total de créditos acumulados (limitado a 22)
+	 */
 	public int getTotalCreditos(String cpf){
 		Validator.verifyStringBlank(cpf, "CPF");
 		int total = 0;
@@ -172,11 +243,16 @@ public class AtividadeController {
 			total += this.calcularCreditoAtividade(cpf, tipo);
 		}
 
-		return total;
+		return Math.min(22, total);
 	}
 
-	public boolean isMetaAlcancada(String cpf, String senha, UsuarioController uc){
-		uc.autenticarUsuario(cpf, senha);
+	/**
+	 * Verifica se o estudante atingiu a meta mínima de créditos (22).
+	 * 
+	 * @param cpf CPF do estudante
+	 * @return true se a meta foi atingida, false caso contrário
+	 */
+	public boolean isMetaAlcancada(String cpf){
 		return this.getTotalCreditos(cpf) >= META_CREDITOS;
 	}
 

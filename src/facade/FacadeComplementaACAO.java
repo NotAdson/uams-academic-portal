@@ -28,16 +28,20 @@ public class FacadeComplementaACAO {
 		return controladorUsuario.alterarSenhaUsuario(cpf, senhaAntiga, novaSenha);
 	}
 	public int adicionarDica(String cpf, String senha, String tema) {
-		return controladorDica.adicionarDica(cpf, senha, tema, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorDica.adicionarDica(cpf, tema, controladorUsuario);
 	}
 	public boolean adicionarElementoTextoDica(String cpf, String senha, int posicao, String texto) {
-		return controladorDica.adicionarElemetoTextoDica(cpf, senha, posicao, texto, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorDica.adicionarElemetoTextoDica(cpf, posicao, texto, controladorUsuario);
 	}
 	public boolean adicionarElementoMultimidiaDica(String cpf, String senha, int posicao, String link, String cabecalho, int tempo) {
-		return controladorDica.adicionarElementoMultimidiaDica(cpf, senha, posicao, link, cabecalho, tempo, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorDica.adicionarElementoMultimidiaDica(cpf, posicao, link, cabecalho, tempo, controladorUsuario);
 	}
 	public boolean adicionarElementoReferenciaDica(String cpf, String senha, int posicao, String titulo, String fonte, int ano, boolean conferida, int importancia) {
-		return controladorDica.adicionarElementoReferenciaDica(cpf, senha, posicao, titulo, fonte, ano, conferida, importancia, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorDica.adicionarElementoReferenciaDica(cpf, posicao, titulo, fonte, ano, conferida, importancia, controladorUsuario);
 	}
 
 	public String[] listarDicas() {
@@ -57,50 +61,65 @@ public class FacadeComplementaACAO {
 	}
 
 	public String criarAtividadeMonitoriaEmEstudante(String cpf, String senha, int unidadeAcumulada, String disciplina) {
-		return controladorAtividade.criarAtividadeMonitoria(cpf, senha, unidadeAcumulada, disciplina, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorAtividade.criarAtividadeMonitoria(cpf, unidadeAcumulada, disciplina);
 	}
 	public boolean alterarDescricaoAtividade(String cpf, String senha, String codigoAtividade, String descricao) {
-		return controladorAtividade.alterarDescricaoAtividade(cpf, senha, codigoAtividade, descricao, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorAtividade.alterarDescricaoAtividade(cpf, codigoAtividade, descricao);
 	}
 	public boolean alterarComprovacaoAtividade(String cpf, String senha, String codigoAtividade, String linkComprovacao) {
-		return controladorAtividade.alterarComprovacaoAtividade(cpf, senha, codigoAtividade, linkComprovacao, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorAtividade.alterarComprovacaoAtividade(cpf, codigoAtividade, linkComprovacao);
 	}
 	public String criarAtividadePesquisaExtensaoEmEstudante(String cpf, String senha, int unidadeAcumulada, String subtipo) {
-		return controladorAtividade.criarAtividadePesquisaExtensao(cpf, senha, unidadeAcumulada, subtipo, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorAtividade.criarAtividadePesquisaExtensao(cpf, unidadeAcumulada, subtipo);
 	}
 	public String criarAtividadeEstagioEmEstudante(String cpf, String senha, int unidadeAcumulada, String nomeEmpresa) {
-		return controladorAtividade.criarAtividadeEstagio(cpf, senha, unidadeAcumulada, nomeEmpresa, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorAtividade.criarAtividadeEstagio(cpf, unidadeAcumulada, nomeEmpresa);
 	}
 	public String criarAtividadeRepresentacaoEstudantil(String cpf, String senha, int unidadeAcumulada, String subtipo) {
-		return controladorAtividade.criarAtividadeRepresentacao(cpf, senha, unidadeAcumulada, subtipo, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorAtividade.criarAtividadeRepresentacao(cpf, unidadeAcumulada, subtipo);
 	}
 	public int creditosAtividade(String cpf, String senha, String tipo) {
-		return controladorAtividade.getCreditoAtividade(cpf, senha, tipo, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorAtividade.getCreditoAtividade(cpf, tipo);
 	}
 	public String gerarMapaCreditosAtividades(String cpf, String senha) {
-		return controladorAtividade.gerarMapaCreditos(cpf, senha, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorAtividade.gerarMapaCreditos(cpf);
 	}
 	public boolean verificarMetaAlcancada(String cpf, String senha) {
-		return controladorAtividade.isMetaAlcancada(cpf, senha, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorAtividade.isMetaAlcancada(cpf);
 	}
 
 	public String gerarRelatorioFinal(String cpf, String senha) {
-		return controladorRelatorio.gerarRelatorioFinal(cpf, senha, controladorUsuario, controladorAtividade);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorRelatorio.gerarRelatorioFinal(cpf, controladorUsuario, controladorAtividade);
 	}
 	public String gerarRelatorioFinalPorAtividade(String cpf, String senha, String tipoAtividade) {
-		return controladorRelatorio.gerarRelatorioFinalPorAtividade(cpf, senha, tipoAtividade, controladorUsuario, controladorAtividade);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorRelatorio.gerarRelatorioFinalPorAtividade(cpf, tipoAtividade, controladorUsuario, controladorAtividade);
 	}
 	public String gerarRelatorioParcial(String cpf, String senha, boolean salvar) {
-		return controladorRelatorio.gerarRelatorioParcial(cpf, senha, salvar, controladorUsuario, controladorAtividade);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorRelatorio.gerarRelatorioParcial(cpf, salvar, controladorUsuario, controladorAtividade);
 	}
 	public String gerarRelatorioParcialPorAtividade(String cpf, String senha, boolean salvar, String tipoAtividade) {
-		return controladorRelatorio.gerarRelatorioParcialPorAtividade(cpf, senha, salvar, tipoAtividade, controladorUsuario, controladorAtividade);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorRelatorio.gerarRelatorioParcialPorAtividade(cpf, salvar, tipoAtividade, controladorUsuario, controladorAtividade);
 	}
 	public String listarHistorico(String cpf, String senha) {
-		return controladorRelatorio.listarHistorico(cpf, senha, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorRelatorio.listarHistorico(cpf);
 	}
 	public boolean excluirItemHistorico(String cpf, String senha, String data) {	
-		return controladorRelatorio.excluirItemHistorico(cpf, senha, data, controladorUsuario);
+		controladorUsuario.autenticarUsuario(cpf, senha);
+		return controladorRelatorio.excluirItemHistorico(cpf, data);
 	}
 }
 
