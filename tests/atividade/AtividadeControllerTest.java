@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
 import usuario.UsuarioController;
 
 class AtividadeControllerTest {
@@ -21,11 +23,17 @@ class AtividadeControllerTest {
         uc.criarUsuario("NOME", "123.456.789-10", "senha123", "124110000");
     }
 
-    @Test
-    void testCriarAtividadePesquisaExtensaoValida() {
-        String codigo = ac.criarAtividadePesquisaExtensao("123.456.789-10", 10, "Projeto Social");
+    @ParameterizedTest
+    @ValueSource(strings = {"PET", "PIBIC", "PIVIC", "PIBITI", "PIVITI", "PROBEX", "PDI"})
+    void testCriarAtividadePesquisaExtensaoValida(String subtipo) {
+        String codigo = ac.criarAtividadePesquisaExtensao("123.456.789-10", 10, subtipo);
         assertNotNull(codigo);
         assertTrue(codigo.startsWith("123.456.789-10_"));
+    }
+    
+    @Test
+    void testCriarAtividadePesquisaExtensaoSubtipoInvalido() {
+        assertEquals("ATIVIDADE NÃO CADASTRADA", ac.criarAtividadePesquisaExtensao("123.456.789-10", 10, "SUBTIPO INVÁLIDO"));
     }
 
     @Test
@@ -45,19 +53,20 @@ class AtividadeControllerTest {
     @Test
     void testCriarAtividadeEstagioHorasInsuficientes() {
         String resultado = ac.criarAtividadeEstagio("123.456.789-10", 299, "Empresa ABC");
-        assertEquals("ABAIXO DO MINIMO DE HORAS", resultado);
+        assertEquals("ATIVIDADE NÃO CADASTRADA", resultado);
     }
 
-    @Test
-    void testCriarAtividadeRepresentacaoValida() {
-        String codigo = ac.criarAtividadeRepresentacao("123.456.789-10", 1, "DCE?");
+    @ParameterizedTest
+    @ValueSource(strings = {"DIRETORIA", "COMISSAO"})
+    void testCriarAtividadeRepresentacaoValida(String subtipo) {
+        String codigo = ac.criarAtividadeRepresentacao("123.456.789-10", 1, subtipo);
         assertNotNull(codigo);
         assertTrue(codigo.startsWith("123.456.789-10_"));
     }
 
     @Test
     void testCriarAtividadeRepresentacaoAnosInsuficientes() {
-        String resultado = ac.criarAtividadeRepresentacao("123.456.789-10", 0, "Conselho Departamental");
+        String resultado = ac.criarAtividadeRepresentacao("123.456.789-10", 0, "COMISSAO");
         assertEquals("ABAIXO DO MINIMO DE ANOS", resultado);
     }
 
@@ -76,7 +85,7 @@ class AtividadeControllerTest {
 
     @Test
     void testAlterarDescricaoAtividadeValida() {
-        ac.criarAtividadePesquisaExtensao("123.456.789-10", 10, "Projeto");
+        ac.criarAtividadePesquisaExtensao("123.456.789-10", 10, "PIVIC");
         String codigo = "123.456.789-10_0";
         boolean resultado = ac.alterarDescricaoAtividade("123.456.789-10", codigo, "Nova descrição");
         assertTrue(resultado);
@@ -90,7 +99,7 @@ class AtividadeControllerTest {
 
     @Test
     void testAlterarComprovacaoAtividadeValida() {
-        ac.criarAtividadePesquisaExtensao("123.456.789-10", 10, "Projeto");
+        ac.criarAtividadePesquisaExtensao("123.456.789-10", 10, "PIBIC");
         String codigo = "123.456.789-10_0";
         boolean resultado = ac.alterarComprovacaoAtividade("123.456.789-10", codigo, "http://comprovacao.com");
         assertTrue(resultado);
@@ -106,7 +115,7 @@ class AtividadeControllerTest {
     void testGetCreditoAtividade(String tipo, int unidades, int esperado) {
         switch(tipo) {
             case "PESQUISA_EXTENSAO":
-                ac.criarAtividadePesquisaExtensao("123.456.789-10", unidades, "Subtipo");
+                ac.criarAtividadePesquisaExtensao("123.456.789-10", unidades, "PIBIC");
                 break;
             case "MONITORIA":
                 ac.criarAtividadeMonitoria("123.456.789-10", unidades, "Disciplina");
@@ -115,7 +124,7 @@ class AtividadeControllerTest {
                 ac.criarAtividadeEstagio("123.456.789-10", unidades, "Empresa");
                 break;
             case "REPRESENTACAO_ESTUDANTIL":
-                ac.criarAtividadeRepresentacao("123.456.789-10", unidades, "Subtipo");
+                ac.criarAtividadeRepresentacao("123.456.789-10", unidades, "DIRETORIA");
                 break;
         }
         
@@ -135,7 +144,7 @@ class AtividadeControllerTest {
     @Test
     void testIsMetaAlcancada() {
         ac.criarAtividadeEstagio("123.456.789-10", 300, "Empresa");
-        ac.criarAtividadePesquisaExtensao("123.456.789-10", 12, "Projeto");
+        ac.criarAtividadePesquisaExtensao("123.456.789-10", 12, "PIBIC");
         ac.criarAtividadeMonitoria("123.456.789-10", 4, "P1");
         
         boolean metaAlcancada = ac.isMetaAlcancada("123.456.789-10");
@@ -161,9 +170,9 @@ class AtividadeControllerTest {
     @Test
     void testGerarMapaCreditos() {
         ac.criarAtividadeMonitoria("123.456.789-10", 5, "P2");
-        ac.criarAtividadePesquisaExtensao("123.456.789-10", 12, "Projeto");
+        ac.criarAtividadePesquisaExtensao("123.456.789-10", 12, "PET");
         
         String mapa = ac.gerarMapaCreditos("123.456.789-10");
-        assertEquals("REPRESENTACAO_ESTUDANTIL: 0/2\nMONITORIA: 16/16\nESTAGIO: 0/18\nPESQUISA_EXTENSAO: 10/18\n", mapa);
+        assertEquals("PESQUISA_EXTENSAO: 10/18\nMONITORIA: 16/16\nESTAGIO: 0/18\nREPRESENTACAO_ESTUDANTIL: 0/2\n", mapa);
     }
 }

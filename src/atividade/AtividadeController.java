@@ -2,7 +2,10 @@ package atividade;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.AbstractMap;
 
 import middleware.Validator;
@@ -22,19 +25,19 @@ public class AtividadeController {
 
 	private final static int META_CREDITOS = 22;
 
-	private HashMap<String, Integer> maximos;
+	private LinkedHashMap<String, Integer> maximos;
 	private HashMap<String, ArrayList<Atividade>> atividades;
 	
 	public AtividadeController(){
 		this.atividades = new HashMap<String, ArrayList<Atividade>>();
 
-		maximos = new HashMap<>();
+		maximos = new LinkedHashMap<>();
 		
 		maximos.put("PESQUISA_EXTENSAO", MAX_CREDITOS_EXTENSAO);
 		maximos.put("MONITORIA", MAX_CREDITOS_MONITORIA);
 		maximos.put("ESTAGIO", MAX_CREDITOS_ESTAGIO);
 		maximos.put("REPRESENTACAO_ESTUDANTIL", MAX_CREDITOS_REPRESENTACAO_ESTUDANTIL);
-
+		
 	}
 
 	/**
@@ -60,7 +63,7 @@ public class AtividadeController {
 
 		cpf = elemento.getKey(); position = elemento.getValue();
 		
-		if(!this.atividades.containsKey(cpf) || (0 < position || position > this.atividades.get(cpf).size())) return false;
+		if(!this.atividades.containsKey(cpf) || this.atividades.get(cpf) == null || (0 > position || position > this.atividades.get(cpf).size())) return false;
 
 		this.atividades.get(cpf).get(position).setDescricao(descricao);
 		return true;
@@ -89,7 +92,7 @@ public class AtividadeController {
 
 		position = elemento.getValue();
 		
-		if(this.atividades.containsKey(cpf) && (0 < position || position > this.atividades.get(cpf).size())) return false;
+		if(!this.atividades.containsKey(cpf) || this.atividades.get(cpf) == null || 0 > position || position > this.atividades.get(cpf).size()) return false;
 
 		this.atividades.get(cpf).get(position).setLink(link);
 		return true;
@@ -105,6 +108,12 @@ public class AtividadeController {
 	 */
 	public String criarAtividadePesquisaExtensao(String cpf, int unidadeAcumulado, String subtipo){
 		Validator.verifyStringBlank(subtipo, "SUBTIPO");
+		Set<String> subtipos = new HashSet<>();
+		subtipos.add("PET"); subtipos.add("PIBIC"); subtipos.add("PIVIC"); subtipos.add("PIBITI"); subtipos.add("PIVITI"); subtipos.add("PROBEX"); subtipos.add("PDI");
+		
+		if(!subtipos.contains(subtipo)) {
+			return "ATIVIDADE NÃO CADASTRADA";
+		}
 		
 		if(!this.atividades.containsKey(cpf)) this.atividades.put(cpf, new ArrayList<>());
 
@@ -125,13 +134,12 @@ public class AtividadeController {
 	 */
 	public String criarAtividadeEstagio(String cpf, int unidadeAcumulado, String empresa){
 		Validator.verifyStringBlank(empresa, "EMPRESA");
+		if(unidadeAcumulado < MIN_HORAS_ESTAGIO) return "ATIVIDADE NÃO CADASTRADA";
 
 		if(!this.atividades.containsKey(cpf)) this.atividades.put(cpf, new ArrayList<>());
 
 		String codigo = cpf + "_" + this.atividades.get(cpf).size();
 		Atividade estagio = new Estagio(codigo, unidadeAcumulado, empresa);
-		
-		if(unidadeAcumulado < MIN_HORAS_ESTAGIO) return "ABAIXO DO MINIMO DE HORAS";
 	
 		if(!this.atividades.containsKey(cpf)) this.atividades.put(cpf, new ArrayList<>());
 
@@ -149,6 +157,12 @@ public class AtividadeController {
 	 */
 	public String criarAtividadeRepresentacao(String cpf, int unidadeAcumulado, String subtipo){
 		Validator.verifyStringBlank(subtipo, "SUBTIPO");
+		Set<String> subtipos = new HashSet<>();
+		subtipos.add("DIRETORIA"); subtipos.add("COMISSAO");
+		
+		if(!subtipos.contains(subtipo)) {
+			return "ATIVIDADE NÃO CADASTRADA";
+		}
 
 		if(!this.atividades.containsKey(cpf)) this.atividades.put(cpf, new ArrayList<>());
 

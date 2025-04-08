@@ -102,6 +102,6 @@ public class Usuario implements Comparable<Usuario> {
 	 */
 	@Override
 	public String toString() {
-		return this.nome + ", " + this.cpf + ", " + this.matricula;
+		return this.nome + ", " + this.cpf + ", " + this.matricula + ".";
 	}
 }

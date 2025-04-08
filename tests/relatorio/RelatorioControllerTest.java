@@ -24,15 +24,15 @@ class RelatorioControllerTest {
         ac = new AtividadeController();
         
         uc.criarUsuario("NOME", CPF_VALIDO, SENHA_VALIDA, "000000000");
-        ac.criarAtividadePesquisaExtensao(CPF_VALIDO, 12, "Subtipo");
+        ac.criarAtividadePesquisaExtensao(CPF_VALIDO, 12, "PIVITI");
         ac.criarAtividadeMonitoria(CPF_VALIDO, 1, "Disciplina");
 
     }
 
     @Test
     void testGerarRelatorioFinalCreditosSuficientes() {
-    	ac.criarAtividadePesquisaExtensao(CPF_VALIDO, 12, "Subtipo");
-    	ac.criarAtividadePesquisaExtensao(CPF_VALIDO, 12, "Subtipo");
+    	ac.criarAtividadePesquisaExtensao(CPF_VALIDO, 12, "PET");
+    	ac.criarAtividadePesquisaExtensao(CPF_VALIDO, 12, "PROBEX");
         String resultado = rc.gerarRelatorioFinal(CPF_VALIDO, uc, ac);
         
         assertTrue(resultado.contains("NOME"));
@@ -41,8 +41,8 @@ class RelatorioControllerTest {
 
     @Test
     void testGerarRelatorioFinalPorAtividadeCreditosSuficientes() {
-    	ac.criarAtividadePesquisaExtensao(CPF_VALIDO, 12, "Subtipo");
-    	ac.criarAtividadePesquisaExtensao(CPF_VALIDO, 12, "Subtipo");
+    	ac.criarAtividadePesquisaExtensao(CPF_VALIDO, 12, "PET");
+    	ac.criarAtividadePesquisaExtensao(CPF_VALIDO, 12, "PIBIC");
         String resultado = rc.gerarRelatorioFinalPorAtividade(CPF_VALIDO, "MONITORIA", uc, ac);
         
         assertTrue(resultado.contains("NOME"));

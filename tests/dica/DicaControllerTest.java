@@ -25,6 +25,15 @@ class DicaControllerTest {
 		int posicao = dc.adicionarDica("123.456.789-10", "Tema Importante", uc);
 		assertEquals(0, posicao);
 	}
+	
+	@Test
+	void testAdicionarDicaMultiplosUsuarios() {
+		uc.criarUsuario("NOME1", "000.000.000-00", "senha123", "125110000");
+		
+		assertEquals(0, dc.adicionarDica("123.456.789-10", "Tema Importante", uc));
+		assertEquals(1, dc.adicionarDica("123.456.789-10", "Tema Importante", uc));
+		assertEquals(2, dc.adicionarDica("000.000.000-00", "Tema Importante", uc));
+	}
 
 	@Test
 	void testAdicionarDicaTemaNulo() {
