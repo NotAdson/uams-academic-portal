@@ -1,19 +1,114 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/xkeSutf1)
-# ComplementACAO
+# Academic Management System
+A comprehensive system for managing academic activities, study tips, and generating reports. Students can track their extracurricular activities, earn credits, share study resources, and monitor their academic progress.
 
-Neste laboratório, você vai trabalhar no contexto do curso de computação da UFCG, imerso no regulamento das atividades complementares.
+## Features
+### Activity Management
+- **Types**: Monitoria (Tutoring), Estágio (Internship), Extensão (Extension Projects), Representação Estudantil (Student Representation)
+- **Validation**: Ensures valid discipline names, company names, and activity durations
+- **Credit Calculation**:
+  - Monitoria: 4 credits/semester (max 16)
+  - Estágio: 1 credit/60 hours (max 18)
+  - Extensão: 10 credits/12 months (max 18)
+  - Representação: 2 credits/year (max 2)
 
-## Ajuda e Suporte
+### Study Tips System
+- **Multimedia Support**: Add videos/audios with duration tracking
+- **Reference Management**: Verified academic references with importance ratings
+- **Bonus System**: Earn points for valuable contributions
+  - Text: Up to 50 points for detailed explanations
+  - Media: 5 points/minute (max 50)
+  - Verified References: 15 points each
 
-Se tiver DÚVIDAS, você pode obter ajuda e suporte por um dos seguintes canais:
+### Reporting
+- **Progress Tracking**: Real-time credit accumulation monitoring
+- **Report Types**:
+  - Final Report: Overall credit summary
+  - Activity-Specific: Detailed breakdown per activity type
+  - Historical Tracking: Save/retrieve previous reports
 
-* [Documentação oficial da linguagem Java](https://docs.oracle.com/javase/tutorial/)
-* Com os MONITORES da disciplina no nosso Canal Oficial da disciplina de P2LP2 no Discord
+### User Management
+- Secure authentication
+- Password policies (exactly 8 characters)
+- Bonus ranking system
+- Student comparison by name/alphabetical order
 
-### Contato dos professores:
+## Technologies Used
 
-Para outras informações, sugestões ou reclamações, nos envie um email:
+- **Core**: Java 21+
+- **Testing**: JUnit 5
+- **Validation**: Custom middleware for null/empty checks
+- **Design Pattern**: Facade for simplified API
 
-* Lí­via Sampaio Campos - [livia@computacao.ufcg.edu.br](mailto:livia@computacao.ufcg.edu.br)
-* Eliane Araújo - [eliane@computacao.ufcg.edu.br](mailto:eliane@computacao.ufcg.edu.br)
-* Melina Mongiovi - [melina@computacao.ufcg.edu.br](mailto:melina@computacao.ufcg.edu.br)
+## Project Structure
+
+```
+.
+├── main/java/
+│   ├── atividade/          # Activity classes and controller
+│   ├── dica/               # Study tips system
+│   ├── relatorio/          # Report generation
+│   ├── usuario/            # User management
+│   ├── middleware/         # Validation utilities
+│   └── facade/             # Unified system interface
+├── test/java/              # Comprehensive unit tests
+└── README.md
+```
+
+## Installation & Usage
+
+1. **Compile**:
+```bash
+mvn compile
+```
+
+2. **Run Tests**:
+```bash
+mvn test
+```
+
+3. **Sample Usage**:
+```java
+FacadeComplementaACAO system = new FacadeComplementaACAO();
+
+// Create student
+system.criarEstudante("Maria Silva", "123.456.789-09", "password", "124110000");
+
+// Add internship activity
+String codigo = system.criarAtividadeEstagioEmEstudante(
+    "123.456.789-09", "password", 300, "Google"
+);
+
+// Generate report
+String relatorio = system.gerarRelatorioFinal(
+    "123.456.789-09", "password"
+);
+```
+
+## What I Learned
+1. **Validation Patterns**:
+   - Null/empty checks with custom exceptions
+   - CPF format validation
+   - Password complexity requirements
+
+2. **Testing Strategies**:
+   - Parameterized JUnit tests
+   - Edge case testing (empty strings, negative values)
+   - Test coverage for 100% of validation logic
+
+3. **System Design**:
+   - Facade pattern for simplified access
+   - Polymorphic activity handling
+   - Credit calculation strategies
+
+4. **Data Management**:
+   - HashMaps for user storage
+   - ArrayLists for activity tracking
+   - LinkedHashMap for ordered credit limits
+
+5. **Reporting**:
+   - Dynamic report generation
+   - Historical data persistence
+   - Progress tracking algorithms
+
+## Contributors
+- [NotAdson] - Sole developer
